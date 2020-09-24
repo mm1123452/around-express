@@ -8,7 +8,7 @@ cardsRouter.get('/', (req, res) => {
    return fs.readFile(dataPath, { encoding: 'utf8' })
    .then(data => JSON.parse(data))
    .then(cards => res.status(200).send(cards))
-   .catch(err => res.status(400).send(err))
+   .catch(err => res.status(500).send(err))
 });
 
 module.exports = cardsRouter;
