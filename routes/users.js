@@ -1,23 +1,27 @@
-const router = require('express').Router();
+const userRouter = require('express').Router();
 const fs = require('fs').promises;
 const path = require('path');
 
-
 const dataPath = path.join(__dirname, '..','data','users.json')
 
-router.get('/users', (req, res) => {
+userRouter.get('/', (req, res) => {
    fs.readFile(dataPath, { encoding: 'utf8' })
    .then(data => JSON.parse(data))
-   .then(users => res.send(users))
+   .then(users => res.status(200).send(users))
+   .catch(err => res.status(400).send(err))
 });
 
-
-router.get('/users/:id', (req, res) => {
+userRouter.get('/:id', (req, res) => {
   fs.readFile(dataPath, { encoding: 'utf8' })
   .then(data => JSON.parse(data))
   .then(users => users.find(user => user._id === req.params.id))
-  .then(user => res.send(user))
-
+  .then(user =>  {
+    if (user) {
+      return res.status(200).send(user)
+    }
+    return res.status(404).send({ "message": "User ID not found" })
+  })
+  .catch(err => res.status(400).send(err))
 });
 
-module.exports = router;
+module.exports = userRouter;
