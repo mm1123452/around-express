@@ -1,5 +1,12 @@
 const userRouter = require('express').Router();
-const fs = require('fs').promises;
+const { getUsers, getUserById,createUser} = require('../controllers/users');
+
+userRouter.get('/', getUsers);
+userRouter.get('/:userId', getUserById);
+userRouter.post('/', createUser);
+
+
+/*const fs = require('fs').promises;
 const path = require('path');
 
 const dataPath = path.join(__dirname, '..','data','users.json')
@@ -22,6 +29,6 @@ userRouter.get('/:id', (req, res) => {
     return res.status(404).send({ "message": "User ID not found" })
   })
   .catch(err => res.status(500).send(err))
-});
+});*/
 
 module.exports = userRouter;
