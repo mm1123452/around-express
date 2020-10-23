@@ -6,7 +6,6 @@ module.exports.getUsers = (req, res) => {
     .catch(err => res.status(500).send({ message: err.message }));
 };
 
-
 module.exports.getUserById = (req, res) => {
   const { userId} = req.params;
 
@@ -16,9 +15,18 @@ module.exports.getUserById = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
+  const ERROR_CODE = 400;
   const { name, about, avatar } = req.body;
 
   User.create({ about, avatar, name})
-    .then(user => res.send({ data: user }))
-    .catch(err => res.status(500).send({ message: err.message }));
+  .then(user => res.send({ data: user }))
+  .catch(err => {
+    console.log('err',err)
+    console.log('err name',err.name)
+
+    if (err.name === 'ValidationError'){
+      console.log('validation error!!!')
+    }
+    res.status(500).send({ message: err.message })
+  });
 };
